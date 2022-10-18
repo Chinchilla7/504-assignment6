@@ -29,14 +29,12 @@ create_Patients_table= """
 create table IF NOT EXISTS patients (
   id int,
   mrn varchar(255),
-  f_name varchar(255),
+  first_name varchar(255),
   last_name varchar(255),
   zip_code varchar(255),
   dob varchar(255),
   gender varchar(255),
-  drug_id int ,
   PRIMARY KEY (id),
-  FOREIGN KEY (drug_id) REFERENCES medications(id)
 );
 """
 
