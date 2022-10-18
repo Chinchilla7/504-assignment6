@@ -21,7 +21,7 @@ connection_string
 db = create_engine(connection_string)
 print (db.table_names())
 
-dummy_patients = """
+fake_patients = """
 insert into patients values (1, '0001', 'amy', 'zhen', '10003', 
 '01/02/2003', 'female'),
 insert into patients values (2, '0002', 'andy', 'lee', '10013', 
@@ -34,4 +34,5 @@ insert into patients values (5, '0005', 'philip', 'vuey', '10004',
 '01/23/2003', 'male');
 """
 
-db.execute(dummy_patients)
+db.execute(fake_patients)
+
