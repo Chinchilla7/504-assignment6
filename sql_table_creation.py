@@ -45,6 +45,7 @@ create table IF NOT EXISTS medications (
   id int,
   mrn varchar(255),
   medication_id varchar(255),
+  ndc_codes varchar(255),
   PRIMARY KEY (id),
   );
   """
@@ -55,10 +56,34 @@ create table IF NOT EXISTS conditions (
   id int,
   mrn varchar(255),
   condition_id varchar(255),
+  icd_10_codes varchar(255),
   PRIMARY KEY (id),
   );
   """
 db.execute(create_conditions_table)
+
+create_treatments_procedures_table= """
+create table IF NOT EXISTS treatments_procedures (
+  id int,
+  mrn varchar(255),
+  treatments_procedures_id varchar(255),
+  cpt_codes varchar(255),
+  PRIMARY KEY (id),
+  );
+  """
+db.execute(create_treatments_procedures_table)
+
+create_social_determinants_table= """
+create table IF NOT EXISTS social_determinants (
+  id int,
+  mrn varchar(255),
+  social_determinants_id varchar(255),
+  loinc_codes varchar(255),
+  PRIMARY KEY (id),
+  );
+  """
+db.execute(create_social_determinants_table)
+
 
 
 
