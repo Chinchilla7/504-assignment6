@@ -10,7 +10,8 @@ import os
 
 #connect to mysql database using credentials
 
-load_dotenv()
+load_.dotenv()
+
 MYSQL_HOSTNAME = os.getenv("MYSQL_HOSTNAME")
 MYSQL_USER = os.getenv("MYSQL_USER")
 MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
