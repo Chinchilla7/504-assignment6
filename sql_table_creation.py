@@ -1,16 +1,15 @@
 #create tables: patients, medications, treatments_procedures, conditions, and social determinants
 from sqlalchemy import create_engine
 import pandas as pd
-from dotenv import dotenv_values
+from dotenv import load_dotenv
 import os
 
 
-#path containing credentials
-#config = dotenv_values(".env")
 
 #connect to mysql database using credentials
 
-load_.dotenv()
+load_dotenv()
+
 
 MYSQL_HOSTNAME = os.getenv("MYSQL_HOSTNAME")
 MYSQL_USER = os.getenv("MYSQL_USER")
