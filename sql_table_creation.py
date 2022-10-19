@@ -22,8 +22,9 @@ connection_string
 db = create_engine(connection_string)
 print (db.table_names())
 
-#creating a new table within patient_portal database called patients containing data from iris csv 
-TABLENAME = MYSQL_USER + 'fakeTableAssignment1'
+#creating new tables within patient_portal database called patients, medications, treatments_procedures, 
+#conditions, and social determinants.  
+#TABLENAME = MYSQL_USER + 'fakeTableAssignment1'
 
 create_Patients_table= """
 create table IF NOT EXISTS patients (
