@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 import pandas as pd
-from dotenv import dotenv_values
+from dotenv import load_dotenv
 import os
 
 
@@ -10,6 +10,7 @@ import os
 #connect to mysql database using credentials
 
 load_dotenv()
+
 MYSQL_HOSTNAME = os.getenv("MYSQL_HOSTNAME")
 MYSQL_USER = os.getenv("MYSQL_USER")
 MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
@@ -72,3 +73,7 @@ insert into conditions values (5, '0005', '05', '63024-4')
 """
 db.execute(fake_social_determinants)
 
+#id int,
+ # mrn varchar(255),
+  #social_id varchar(255),
+  #loinc_codes varchar(255)
