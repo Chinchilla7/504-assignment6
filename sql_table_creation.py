@@ -88,16 +88,6 @@ db.execute(create_social_determinants_table)
 
 
 
-r_df = pd.read_csv('')
-r_df.to_sql('patients', con=db, if_exists='replace')
-
-sql_query = 'SELECT * from  where =""'
-
-results =pd.read_sql(sql_query, con=db)
-results
-
-
-
 
 
 
