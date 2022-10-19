@@ -73,7 +73,3 @@ insert into conditions values (5, '0005', '05', '63024-4')
 """
 db.execute(fake_social_determinants)
 
-#id int,
- # mrn varchar(255),
-  #social_id varchar(255),
-  #loinc_codes varchar(255)
