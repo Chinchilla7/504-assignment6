@@ -6,6 +6,22 @@ import os
 
 
 
+#### drop the old tables that do not start with production_
+#def droppingFunction_limited(dbList, db_source):
+  #  for table in dbList:
+   #     if table.startswith('production_') == False:
+   #         db_source.execute(f'drop table {table}')
+    #        print(f'dropped table {table}')
+     #   else:
+      #      print(f'kept table {table}')
+
+#def droppingFunction_all(dbList, db_source):
+   # for table in dbList:
+   #     db_source.execute(f'drop table {table}')
+   #     print(f'dropped table {table}')
+   # else:
+   #     print(f'kept table {table}')
+
 #connect to mysql database using credentials
 
 load_dotenv()
@@ -22,6 +38,12 @@ connection_string
 db = create_engine(connection_string)
 print (db.table_names())
 
+
+## reoder tables: production_patient_conditions, production_patient_medications, production_medications, production_patients, production_conditions
+#tableNames = ['production_patient_conditions', 'production_patient_medications', 'production_medications', 'production_patients', 'production_conditions']
+
+## ### delete everything 
+#droppingFunction_all(tableNames, db)
 #creating new tables within patient_portal database called patients, medications, treatments_procedures, 
 #conditions, and social determinants.  
 #TABLENAME = MYSQL_USER + 'fakeTableAssignment1'
