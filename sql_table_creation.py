@@ -16,7 +16,7 @@ MYSQL_USER = os.getenv("MYSQL_USER")
 MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
 MYSQL_DATABASE = os.getenv("MYSQL_DATABASE")
 
-connection_string = f'mysql+pymysql://{["MYSQL_USER"]}:{["MYSQL_PASSWORD"]}@{["MYSQL_HOSTNAME"]}/{["MYSQL_DATABASE"]}'
+connection_string = f'mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOSTNAME}:3306/{MYSQL_DATABASE}'
 connection_string
 
 db = create_engine(connection_string)
@@ -26,7 +26,7 @@ print (db.table_names())
 #conditions, and social determinants.  
 #TABLENAME = MYSQL_USER + 'fakeTableAssignment1'
 
-create_Patients_table= """
+create_Patients_table = """
 create table IF NOT EXISTS patients (
   id int,
   mrn varchar(255),
