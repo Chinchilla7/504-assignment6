@@ -40,10 +40,11 @@ print (db.table_names())
 
 
 ## reoder tables: create_Patients_conditions, create_Patients_medications, create_medications_table, create_Patients_table, create_conditions_table, create_social_determinants_table, 
-#tableNames = ['create_Patients_conditions', 'create_Patients_medications', 'create_medications_table', 'create_Patients_table', 'create_conditions_table', 'create_social_determinants_table']
-
+tableNames = ['create_Patients_conditions', 'create_Patients_medications', 'create_medications_table', 'create_Patients_table', 'create_conditions_table', 'create_social_determinants_table']
+tableNames = db.table_names()
+print (tableNames)
 ## ### delete everything 
-#droppingFunction_all(tableNames, db)
+droppingFunction_all(tableNames, db)
 
 #creating new tables within patient_portal database called patients, medications, treatments_procedures, 
 #conditions, and social determinants.  
@@ -57,7 +58,7 @@ create table IF NOT EXISTS patients (
   zip_code varchar(255) default null,
   dob varchar(255) default null,
   gender varchar(255) default null,
-  PRIMARY KEY (id),
+  PRIMARY KEY (id)
 );
 """
 
@@ -68,7 +69,7 @@ create table IF NOT EXISTS medications (
   id int auto_increment,
   medication_name varchar(255) default null,
   ndc_codes varchar(255) default null unique,
-  PRIMARY KEY (id),
+  PRIMARY KEY (id)
   );
   """
 db.execute(create_medications_table)
@@ -78,7 +79,7 @@ create table IF NOT EXISTS conditions (
   id int auto_increment,
   icd_10_codes varchar(255) default null unique,
   icd_description varchar(255) default null,
-  PRIMARY KEY (id),
+  PRIMARY KEY (id)
   );
   """
 db.execute(create_conditions_table)
@@ -88,17 +89,17 @@ create table IF NOT EXISTS treatments_procedures (
   id int auto_increment,
   treatments_procedures_desciption varchar(255),
   cpt_codes varchar(255) default null unique,
-  PRIMARY KEY (id),
+  PRIMARY KEY (id)
   );
   """
 db.execute(create_treatments_procedures_table)
 
-create_social_determinants_table= """
+create_social_determinants_table = """
 create table IF NOT EXISTS social_determinants (
   id int auto_increment,
   social_determinants_description varchar(255),
   loinc_codes varchar(255) default null unique,
-  PRIMARY KEY (id),
+  PRIMARY KEY (id)
   );
   """
 db.execute(create_social_determinants_table)
@@ -109,8 +110,8 @@ create table IF NOT EXISTS patients_medication (
   mrn varchar(255) default null,
   ndc_codes varchar(255) default null,
   PRIMARY KEY (id),
-  FOREIGN KEY (mrn) REFERNCES patients(mrn) ON DELETE CASCADE,
-  FOREIGN KEY (ndc_codes) REFERNCES medications(ndc_codes) ON DELETE CASCADE,
+  FOREIGN KEY (mrn) REFERENCES patients(mrn) ON DELETE CASCADE,
+  FOREIGN KEY (ndc_codes) REFERENCES medications(ndc_codes) ON DELETE CASCADE
 );
 """
 db.execute(create_Patients_medications)
@@ -121,8 +122,8 @@ create table IF NOT EXISTS patients_conditions (
   mrn varchar(255) default null,
   icd_10_codes varchar(255) default null,
   PRIMARY KEY (id),
-  FOREIGN KEY (mrn) REFERNCES patients(mrn) ON DELETE CASCADE,
-  FOREIGN KEY (icd_10_codes) REFERNCES medications(icd_10_codes) ON DELETE CASCADE,
+  FOREIGN KEY (mrn) REFERENCES patients(mrn) ON DELETE CASCADE,
+  FOREIGN KEY (icd_10_codes) REFERENCES conditions(icd_10_codes) ON DELETE CASCADE
 );
 """
 db.execute(create_Patients_conditions)
