@@ -27,7 +27,7 @@ print (db.table_names())
 
 #### fake stuff 
 fake = Faker()
-
+#fake.first_name()
 fake_patients = [
     {
         #keep just the first 8 characters of the uuid
@@ -37,7 +37,7 @@ fake_patients = [
         'zip_code':fake.zipcode(),
         'dob':(fake.date_between(start_date='-90y', end_date='-20y')).strftime("%Y-%m-%d"),
         'gender': fake.random_element(elements=('M', 'F'))
-    } for x in range(10)]
+    } for x in range(50)]
 
 df_fake_patients = pd.DataFrame(fake_patients)
 # drop duplicate mrn
@@ -47,8 +47,8 @@ df_fake_patients = df_fake_patients.drop_duplicates(subset=['mrn'])
 #### real icd10 codes
 icd10codes = pd.read_csv('https://raw.githubusercontent.com/Bobrovskiy/ICD-10-CSV/master/2020/diagnosis.csv')
 list(icd10codes.columns)
-icd10codesShort = icd10codes[['CodeWithSeparator', 'ShortDescription']]
-icd10codesShort_1k = icd10codesShort.sample(n=1000, random_state=1)
+#icd10codesShort = icd10codes[['CodeWithSeparator', 'ShortDescription']]
+icd10codesShort_1k = icd10codes.sample(n=1000, random_state=1)
 # drop duplicates
 icd10codesShort_1k = icd10codesShort_1k.drop_duplicates(subset=['CodeWithSeparator'], keep='first')
 
@@ -56,16 +56,18 @@ icd10codesShort_1k = icd10codesShort_1k.drop_duplicates(subset=['CodeWithSeparat
 
 #### real ndc codes
 ndc_codes = pd.read_csv('https://raw.githubusercontent.com/hantswilliams/FDA_NDC_CODES/main/NDC_2022_product.csv')
+list(ndc_codes.columns)
 ndc_codes_1k = ndc_codes.sample(n=1000, random_state=1)
 # drop duplicates from ndc_codes_1k
 ndc_codes_1k = ndc_codes_1k.drop_duplicates(subset=['PRODUCTNDC'], keep='first')
 
 
 # real cpt codes
-cpt_codes = pd.read_csv('')
+cpt_codes = pd.read_csv('https://gist.githubusercontent.com/lieldulev/439793dc3c5a6613b661c33d71fdd185/raw/25c3abcc5c24e640a0a5da1ee04198a824bf58fa/cpt4.csv')
+list(cpt_codes.columns)
 cpt_codes_1k = cpt_codes.sample(n=1000, random_state=1)
 # drop duplicates from ndc_codes_1k
-cpt_codes_1k = cpt_codes_1k.drop_duplicates(subset=[''], keep='first')
+cpt_codes_1k = cpt_codes_1k.drop_duplicates(subset=['com.medigy.persist.reference.type.clincial.CPT.code'], keep='first')
 
 
 # real loinc codes
@@ -76,14 +78,14 @@ loinc_codes_1k = cpt_codes_1k.drop_duplicates(subset=[''], keep='first')
 
 
 #Insert fake patients into table patients
-insertQuery = "INSERT INTO production_patients (mrn, first_name, last_name, zip_code, dob, gender, contact_mobile, contact_home) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+insertQuery = "INSERT INTO patients (mrn, first_name, last_name, zip_code, dob, gender) VALUES (%s, %s, %s, %s, %s, %s)"
 
 for index, row in df_fake_patients.iterrows():
-    db.execute(insertQuery, (row['mrn'], row['first_name'], row['last_name'], row['zip_code'], row['dob'], row['gender'], row['contact_mobile'], row['contact_home']))
+    db.execute(insertQuery, (row['mrn'], row['first_name'], row['last_name'], row['zip_code'], row['dob'], row['gender']))
     print("inserted row: ", index)
 
 # # query dbs to see if data is there
-df_gcp = pd.read_sql_query("SELECT * FROM production_patients", db)
+df_gcp = pd.read_sql_query("SELECT * FROM patients", db)
 
 #Insert conditions
 insertQuery = "INSERT INTO conditions (icd_10_codes, icd_description) VALUES (%s, %s)"
@@ -98,10 +100,10 @@ for index, row in icd10codesShort_1k.iterrows():
         break
 
 # query dbs to see if data is there
-df_gcp = pd.read_sql_query("SELECT * FROM production_conditions", db)
+df_gcp = pd.read_sql_query("SELECT * FROM conditions", db)
 
 #Insert medications into medications table
-insertQuery = "INSERT INTO production_medications (ndc_codes, medication_name) VALUES (%s, %s)"
+insertQuery = "INSERT INTO medications (ndc_codes, medication_name) VALUES (%s, %s)"
 
 medRowCount = 0
 for index, row in ndc_codes_1k.iterrows():
@@ -114,7 +116,7 @@ for index, row in ndc_codes_1k.iterrows():
 
 
 # query dbs to see if data is there
-df_gcp = pd.read_sql_query("SELECT * FROM production_medications", db)
+df_gcp = pd.read_sql_query("SELECT * FROM medications", db)
 
 #Insert treatments/procedures into treatments_procedures table
 insertQuery = "INSERT INTO treatments_procedures (treatments_procedures_desciption, cpt_codes) VALUES (%s, %s)"
@@ -122,7 +124,7 @@ insertQuery = "INSERT INTO treatments_procedures (treatments_procedures_descipti
 medRowCount = 0
 for index, row in cpt_codes_1k.iterrows():
     medRowCount += 1
-    db.execute(insertQuery, (row[''], row['']))
+    db.execute(insertQuery, (row['label'], row['com.medigy.persist.reference.type.clincial.CPT.code']))
     print("inserted row: ", index)
     ## stop once we have 50 rows
     if medRowCount == 50:
@@ -130,10 +132,9 @@ for index, row in cpt_codes_1k.iterrows():
 
 
 # query dbs to see if data is there
-df_gcp = pd.read_sql_query("SELECT * FROM social_determinants", db)
+df_gcp = pd.read_sql_query("SELECT * FROM treatments_procedures", db)
 
 #Insert social determinants into social determinants table
-#social_determinants_description
 insertQuery = "INSERT INTO social_determinants (social_determinants_description, loinc_codes) VALUES (%s, %s)"
 
 medRowCount = 0
@@ -173,7 +174,7 @@ for index, row in df_patients.iterrows():
 print(df_patient_medications)
 
 # now lets add a random medication to each patient
-insertQuery = "INSERT INTO production_patient_medications (mrn, ndc_codes) VALUES (%s, %s)"
+insertQuery = "INSERT INTO patients_medications (mrn, ndc_codes) VALUES (%s, %s)"
 
 for index, row in df_patient_medications.iterrows():
     db(insertQuery, (row['mrn'], row['ndc_codes']))
@@ -204,7 +205,7 @@ print(df_patient_conditions)
 insertQuery = "INSERT INTO production_patient_conditions (mrn, icd_10_codes) VALUES (%s, %s)"
 
 for index, row in df_patient_conditions.iterrows():
-    db(insertQuery, (row['mrn'], row['icd10_code']))
+    db(insertQuery, (row['mrn'], row['icd_10_code']))
     print("inserted row: ", index)
 
 
