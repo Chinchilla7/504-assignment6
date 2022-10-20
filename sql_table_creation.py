@@ -6,10 +6,10 @@ import os
 import dbm
 
 
-#### drop the old tables that do not start with 
+#### drop the old tables that do not start with create_
 def droppingFunction_limited(dbList, db_source):
     for table in dbList:
-        if table.startswith('') == False:
+        if table.startswith('create_') == False:
             db_source.execute(f'drop table {table}')
             print(f'dropped table {table}')
         else:
@@ -39,8 +39,8 @@ db = create_engine(connection_string)
 print (db.table_names())
 
 
-## reoder tables: production_patient_conditions, production_patient_medications, production_medications, production_patients, production_conditions
-#tableNames = ['production_patient_conditions', 'production_patient_medications', 'production_medications', 'production_patients', 'production_conditions']
+## reoder tables: create_Patients_conditions, create_Patients_medications, create_medications_table, create_Patients_table, create_conditions_table, create_social_determinants_table, 
+#tableNames = ['create_Patients_conditions', 'create_Patients_medications', 'create_medications_table', 'create_Patients_table', 'create_conditions_table', 'create_social_determinants_table']
 
 ## ### delete everything 
 #droppingFunction_all(tableNames, db)
@@ -63,7 +63,7 @@ create table IF NOT EXISTS patients (
 
 db.execute(create_Patients_table)
 
-create_medications_table= """
+create_medications_table = """
 create table IF NOT EXISTS medications (
   id int auto_increment,
   medication_name varchar(255) default null,
@@ -73,7 +73,7 @@ create table IF NOT EXISTS medications (
   """
 db.execute(create_medications_table)
 
-create_conditions_table= """
+create_conditions_table = """
 create table IF NOT EXISTS conditions (
   id int auto_increment,
   icd_10_codes varchar(255) default null unique,
@@ -83,7 +83,7 @@ create table IF NOT EXISTS conditions (
   """
 db.execute(create_conditions_table)
 
-create_treatments_procedures_table= """
+create_treatments_procedures_table = """
 create table IF NOT EXISTS treatments_procedures (
   id int auto_increment,
   treatments_procedures_desciption varchar(255),
