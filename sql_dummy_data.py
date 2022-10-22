@@ -175,7 +175,7 @@ for index, row in df_patients.iterrows():
 print(df_patient_medications)
 
 # now lets add a random medication to each patient
-insertQuery = "INSERT INTO patients_medications (mrn, ndc_codes) VALUES (%s, %s)"
+insertQuery = "INSERT INTO patients_medication (mrn, ndc_codes) VALUES (%s, %s)"
 
 for index, row in df_patient_medications.iterrows():
     db(insertQuery, (row['mrn'], row['ndc_codes']))
