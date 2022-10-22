@@ -71,10 +71,11 @@ cpt_codes_1k = cpt_codes_1k.drop_duplicates(subset=['com.medigy.persist.referenc
 
 
 # real loinc codes
-loinc_codes = pd.read_csv('')
-loinc_codes_1k = cpt_codes.sample(n=1000, random_state=1)
+loinc_codes = pd.read_csv('data/Loinc.csv', low_memory=False)
+list(loinc_codes)
+loinc_codes_1k = loinc_codes.sample(n=1000, random_state=1)
 # drop duplicates from ndc_codes_1k
-loinc_codes_1k = cpt_codes_1k.drop_duplicates(subset=[''], keep='first')
+loinc_codes_1k = loinc_codes.drop_duplicates(subset=['LOINC_NUM'], keep='first')
 
 
 #Insert fake patients into table patients
@@ -140,7 +141,7 @@ insertQuery = "INSERT INTO social_determinants (social_determinants_description,
 medRowCount = 0
 for index, row in loinc_codes_1k.iterrows():
     medRowCount += 1
-    db.execute(insertQuery, (row[''], row['']))
+    db.execute(insertQuery, (row['LONG_COMMON_NAME'], row['LOINC_NUM']))
     print("inserted row: ", index)
     ## stop once we have 50 rows
     if medRowCount == 50:
