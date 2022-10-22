@@ -203,10 +203,10 @@ for index, row in df_patients.iterrows():
 print(df_patient_conditions)
 
 # now lets add a random condition to each patient
-insertQuery = "INSERT INTO production_patient_conditions (mrn, icd_10_codes) VALUES (%s, %s)"
+insertQuery = "INSERT INTO patients_conditions (mrn, icd_10_codes) VALUES (%s, %s)"
 
 for index, row in df_patient_conditions.iterrows():
-    db(insertQuery, (row['mrn'], row['icd_10_code']))
+    db(insertQuery, (row['mrn'], row['icd_10_codes']))
     print("inserted row: ", index)
 
 
