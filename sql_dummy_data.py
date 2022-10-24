@@ -178,7 +178,7 @@ print(df_patient_medications)
 insertQuery = "INSERT INTO patients_medication (mrn, ndc_codes) VALUES (%s, %s)"
 
 for index, row in df_patient_medications.iterrows():
-    db(insertQuery, (row['mrn'], row['ndc_codes']))
+    db.execute(insertQuery, (row['mrn'], row['ndc_codes']))
     print("inserted row: ", index)
 
 
@@ -206,7 +206,7 @@ print(df_patient_conditions)
 insertQuery = "INSERT INTO patients_conditions (mrn, icd_10_codes) VALUES (%s, %s)"
 
 for index, row in df_patient_conditions.iterrows():
-    db(insertQuery, (row['mrn'], row['icd_10_codes']))
+    db.execute(insertQuery, (row['mrn'], row['icd_10_codes']))
     print("inserted row: ", index)
 
 
